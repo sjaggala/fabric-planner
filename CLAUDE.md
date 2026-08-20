@@ -11,7 +11,8 @@ A self-contained, single-file web app that acts as an **8-week Microsoft Fabric 
 for the **DP-600 (Fabric Analytics Engineer)** certification. It is a personal learning tool for
 one user (Sravan), with a day-by-day plan view and a progress-tracking view.
 
-- **Live goal:** published on GitHub Pages so it's reachable from any device, anytime.
+- **Live:** published on GitHub Pages — https://sjaggala.github.io/fabric-planner/ — reachable
+  from any device, anytime. (See "Publishing" below for the repo and update workflow.)
 - **The whole app is one file:** `index.html` (was `fabric-planner.html` before publishing).
 
 ## Who it's for
@@ -76,6 +77,8 @@ Everything lives in one file: `<style>` block, HTML skeleton, then one `<script>
 ## Conventions to follow when editing
 
 - Keep it **one file**. If a change is big enough to tempt you to split files, ask the user first.
+- **Any new files belong in this `Fabric Planner` folder** (and, if part of the app, get committed
+  to the `sjaggala/fabric-planner` repo). Don't scatter project files elsewhere.
 - Reuse the existing CSS variables and phase color system; don't hardcode hex values in new UI.
 - Watch CSS selector specificity — the stylesheet mixes type-based and element-based selectors;
   avoid rules that silently cancel each other (especially padding/margin between sections).
@@ -95,11 +98,15 @@ Everything lives in one file: `<style>` block, HTML skeleton, then one `<script>
 3. **GitHub Pages requires a public repo** on the free tier. The planner contains no secrets, so
    public is fine — but confirm with the user before making anything public.
 
-## Publishing (GitHub Pages)
+## Publishing (GitHub Pages) — LIVE
 
-- Serve from the **root of the main branch**. The entry file must be `index.html`.
-- Repo name `fabric-planner` → URL `https://<username>.github.io/fabric-planner/`.
-- Repo name `<username>.github.io` → served at the root domain (only if that repo is free to use).
+- **Repo:** [`sjaggala/fabric-planner`](https://github.com/sjaggala/fabric-planner) (public).
+- **Live URL:** https://sjaggala.github.io/fabric-planner/ (verified HTTP 200, serves `index.html`).
+- **Config:** GitHub Pages, source = **main branch, root (`/`)**. Entry file is `index.html`.
+- **Workflow for updates:** edit `index.html` in this folder → `git add -A && git commit` →
+  `git push`. Pages rebuilds automatically (usually live within ~1 min). Same setup as the
+  gym-routine site. Public repo is required for free Pages; the planner holds no secrets.
+- The project context files (`CLAUDE.md`, `PLAN.md`) are committed to the repo alongside the app.
 
 ---
 
@@ -115,3 +122,17 @@ architecture, decisions, conventions, or scope:
 Do this **in the same change/commit** as the code edit, not later. Treat outdated context files as
 a bug. If the user asks for something that contradicts a decision recorded here, surface the
 conflict before proceeding.
+
+---
+
+## Claude self-update log
+
+> A running log of changes **Claude** makes to this project and its context files. This is the
+> section to append to whenever you (Claude) act on this project. Keep newest at the top; one entry
+> per working session. Detailed decision history still lives in PLAN.md's changelog — this is the
+> quick "what did Claude touch" trail.
+
+- **2026-08-20** — Published the planner to GitHub Pages. Created public repo
+  `sjaggala/fabric-planner`, committed `index.html` + context files, enabled Pages (main root),
+  verified https://sjaggala.github.io/fabric-planner/ returns HTTP 200. Updated CLAUDE.md
+  (Publishing section, live URL, new-files convention, this log) and PLAN.md (status + changelog).

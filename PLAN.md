@@ -55,12 +55,12 @@ so each week's labs feed the next.
 - ✅ Progress view: completion ring, stat cards, per-week bars, 40-cell check-in grid, "Next up",
   start-date picker, reset.
 - ✅ Persistence via localStorage; pace indicator ("on pace" vs "behind").
-- 🔜 **Not yet published** — next action is GitHub Pages deployment (rename to `index.html`,
-  public repo, serve from main root).
+- ✅ **Published to GitHub Pages** — public repo `sjaggala/fabric-planner`, served from main root,
+  live at https://sjaggala.github.io/fabric-planner/ (verified HTTP 200).
 
 ## Roadmap / future work (rough priority order)
 
-1. **Publish to GitHub Pages.** Public repo, `index.html` at root. Confirm the live URL returns 200.
+1. ✅ ~~**Publish to GitHub Pages.**~~ Done 2026-08-20 → https://sjaggala.github.io/fabric-planner/
 2. **Cross-device progress sync.** The #1 enhancement. Options, simplest → most involved:
    - Manual **export/import** of progress as a JSON file (quick win, no accounts).
    - Sync to a **GitHub Gist** via a personal access token (works with the Pages setup).
@@ -77,9 +77,10 @@ so each week's labs feed the next.
 
 ## Open questions to revisit with the user
 
-- Public vs private repo (public required for free Pages) — confirm before publishing.
+- ~~Public vs private repo~~ → **Resolved:** public repo (matches gym-routine; no secrets).
+- ~~Repo subpath vs `<username>.github.io` root~~ → **Resolved:** subpath
+  `sjaggala.github.io/fabric-planner/`.
 - Which cross-device sync approach fits their comfort level (JSON export vs Gist vs backend)?
-- Do they want the planner at the repo subpath or at their `<username>.github.io` root?
 
 ---
 
@@ -87,6 +88,11 @@ so each week's labs feed the next.
 
 Keep newest at the top. Log every meaningful decision or change with a date.
 
+- **2026-08-20** — **Published to GitHub Pages.** Created public repo `sjaggala/fabric-planner`,
+  committed `index.html` + context files at root, enabled Pages (main branch, `/`), verified the
+  live URL https://sjaggala.github.io/fabric-planner/ returns HTTP 200 serving the planner.
+  Resolved the public-repo and subpath open questions. Update workflow going forward:
+  edit → commit → push (Pages auto-rebuilds). Added a "Claude self-update log" section to CLAUDE.md.
 - **2026-08-20** — Created CLAUDE.md and PLAN.md as project memory files. Captured architecture,
   module priorities, certification choice (DP-600), key decisions, known limitations, and roadmap.
   Project is feature-complete for v1 and ready to publish to GitHub Pages (pending rename to
