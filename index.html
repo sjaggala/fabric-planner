@@ -1,0 +1,1097 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fabric in 8 Weeks — DP-600 study planner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;450;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F4F6F8; --surface:#FFFFFF; --surface-2:#EEF1F4;
+  --ink:#13161B; --ink-2:#586070; --ink-3:#8A91A0;
+  --line:#E2E6EB; --line-2:#D2D8E0;
+  --gold:#B9791A; --gold-soft:#F5E9D2;
+  --p1:#0E8C6F; --p1-soft:#DCF1EB;
+  --p2:#5B53C6; --p2-soft:#E6E4FA;
+  --p3:#C2522E; --p3-soft:#F7E3DB;
+  --p4:#3A6CA6; --p4-soft:#E0EAF5;
+  --learn:#1E6FB8; --learn-soft:#E3EFFA;
+  --lab:#3B7D2C; --lab-soft:#E5F2DF;
+  --review:#9A6711; --review-soft:#F6ECD7;
+  --exam:#B03A4A; --exam-soft:#F8E3E6;
+  --radius:14px; --radius-sm:9px;
+  --display:'Space Grotesk',system-ui,sans-serif;
+  --body:'Inter',system-ui,sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--bg);color:var(--ink);
+  font-family:var(--body);font-size:15px;line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+a{color:inherit}
+button{font-family:inherit;cursor:pointer}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+
+/* ---------- header ---------- */
+header{
+  position:sticky;top:0;z-index:40;background:rgba(244,246,248,.86);
+  backdrop-filter:saturate(160%) blur(10px);border-bottom:1px solid var(--line);
+}
+.bar{display:flex;align-items:center;gap:18px;padding:14px 0;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:12px;min-width:0}
+.logo{
+  width:42px;height:42px;border-radius:11px;flex-shrink:0;
+  background:var(--ink);color:#fff;display:grid;place-items:center;
+  font-family:var(--display);font-weight:700;font-size:18px;letter-spacing:-.5px;
+}
+.brand h1{
+  font-family:var(--display);font-weight:600;font-size:19px;margin:0;
+  letter-spacing:-.3px;line-height:1.1;
+}
+.brand p{margin:1px 0 0;font-size:12.5px;color:var(--ink-2);font-weight:450}
+.brand .accent{color:var(--gold)}
+.hdr-right{margin-left:auto;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.mini-ring{display:flex;align-items:center;gap:10px}
+.mini-ring svg{display:block}
+.mini-ring .pct{font-family:var(--display);font-weight:600;font-size:15px}
+.mini-ring .lbl{font-size:11.5px;color:var(--ink-2);line-height:1.25}
+.toggle{display:flex;background:var(--surface-2);border-radius:10px;padding:3px;gap:2px}
+.toggle button{
+  border:none;background:transparent;color:var(--ink-2);font-weight:500;
+  font-size:13.5px;padding:7px 15px;border-radius:8px;transition:.18s;
+}
+.toggle button.on{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgba(20,30,50,.08)}
+
+/* ---------- view container ---------- */
+main{padding:26px 0 80px}
+.view{display:none}
+.view.show{display:block;animation:fade .3s ease}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+/* ---------- week rail ---------- */
+.rail{margin-bottom:20px}
+.rail-scroll{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;scrollbar-width:thin}
+.wkpill{
+  flex:0 0 auto;border:1px solid var(--line-2);background:var(--surface);
+  border-radius:11px;padding:9px 13px 8px;min-width:104px;text-align:left;
+  transition:.16s;position:relative;
+}
+.wkpill:hover{border-color:var(--ink-3)}
+.wkpill .ph{font-size:10.5px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;display:flex;align-items:center;gap:5px}
+.wkpill .ph::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--pc)}
+.wkpill .wk{font-family:var(--display);font-weight:600;font-size:15px;margin-top:3px}
+.wkpill .dn{font-size:11.5px;color:var(--ink-3)}
+.wkpill .bar-mini{height:3px;border-radius:2px;background:var(--surface-2);margin-top:7px;overflow:hidden}
+.wkpill .bar-mini i{display:block;height:100%;background:var(--pc);width:0;transition:width .4s}
+.wkpill.on{border-color:var(--pc);box-shadow:0 0 0 1px var(--pc)}
+
+/* ---------- filters ---------- */
+.filters{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.chip{
+  border:1px solid var(--line-2);background:var(--surface);color:var(--ink-2);
+  border-radius:20px;padding:6px 13px;font-size:13px;font-weight:500;transition:.15s;
+}
+.chip:hover{border-color:var(--ink-3)}
+.chip.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.filters .sep{flex:1}
+.linkbtn{border:none;background:none;color:var(--ink-2);font-size:13px;font-weight:500;padding:6px 8px;border-radius:7px}
+.linkbtn:hover{background:var(--surface-2);color:var(--ink)}
+.switch{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--ink-2);font-weight:500}
+.switch input{display:none}
+.switch .track{width:38px;height:22px;border-radius:11px;background:var(--line-2);position:relative;transition:.18s}
+.switch .track::after{content:"";position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:#fff;transition:.18s;box-shadow:0 1px 2px rgba(0,0,0,.2)}
+.switch input:checked + .track{background:var(--p1)}
+.switch input:checked + .track::after{transform:translateX(16px)}
+
+/* ---------- phase banner ---------- */
+.phase-banner{
+  display:flex;align-items:center;gap:11px;margin-bottom:14px;
+  padding:11px 15px;border-radius:var(--radius-sm);background:var(--pc-soft);
+}
+.phase-banner .tag{font-family:var(--display);font-weight:600;font-size:13px;color:var(--pc-ink);background:rgba(255,255,255,.6);padding:3px 9px;border-radius:7px}
+.phase-banner .txt{font-size:13.5px;color:var(--pc-ink);font-weight:500}
+
+/* ---------- day cards ---------- */
+.days{display:flex;flex-direction:column;gap:11px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;transition:border-color .15s}
+.card.done{background:#FBFCFD}
+.card-head{display:flex;align-items:center;gap:13px;padding:15px 17px;width:100%;border:none;background:none;text-align:left}
+.daynum{
+  width:40px;height:40px;border-radius:11px;flex-shrink:0;display:grid;place-items:center;
+  font-family:var(--display);font-weight:600;font-size:14px;
+  background:var(--pc-soft);color:var(--pc-ink);
+}
+.card.done .daynum{background:var(--pc);color:#fff}
+.headmeta{flex:1;min-width:0}
+.headmeta .t{font-family:var(--display);font-weight:600;font-size:15.5px;letter-spacing:-.2px;line-height:1.25}
+.card.done .headmeta .t{color:var(--ink-2)}
+.headmeta .s{font-size:12.5px;color:var(--ink-3);margin-top:1px}
+.badge{font-size:10.5px;font-weight:600;letter-spacing:.03em;text-transform:uppercase;padding:4px 9px;border-radius:7px;white-space:nowrap}
+.b-learn{background:var(--learn-soft);color:var(--learn)}
+.b-lab{background:var(--lab-soft);color:var(--lab)}
+.b-review{background:var(--review-soft);color:var(--review)}
+.b-exam{background:var(--exam-soft);color:var(--exam)}
+.chev{color:var(--ink-3);transition:transform .2s;flex-shrink:0}
+.card.open .chev{transform:rotate(180deg)}
+.date-pill{font-family:var(--mono);font-size:11.5px;color:var(--ink-2);background:var(--surface-2);padding:4px 8px;border-radius:7px;white-space:nowrap}
+
+.body{display:none;padding:0 17px 17px;border-top:1px solid var(--line)}
+.card.open .body{display:block}
+.body-inner{padding-top:15px;display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media(max-width:680px){.body-inner{grid-template-columns:1fr;gap:16px}}
+.sec h4{
+  font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--ink-3);margin:0 0 8px;
+}
+.sec ul{list-style:none;margin:0;padding:0}
+.sec li{display:flex;gap:9px;padding:5px 0;font-size:13.5px;line-height:1.5}
+.sec li::before{content:"";flex-shrink:0;width:5px;height:5px;border-radius:50%;background:var(--line-2);margin-top:8px}
+.sec.res li::before{background:var(--gold)}
+.sec code{font-family:var(--mono);font-size:12px;background:var(--surface-2);padding:1px 5px;border-radius:5px}
+.sec em{color:var(--ink-2);font-style:italic}
+pre{
+  font-family:var(--mono);font-size:11.5px;line-height:1.7;
+  background:#11151C;color:#D6DEE8;border-radius:9px;padding:11px 13px;
+  overflow-x:auto;margin:8px 0 0;
+}
+pre .cm{color:#7C8AA0}
+.tip{
+  grid-column:1/-1;display:flex;gap:10px;background:var(--surface-2);
+  border-radius:9px;padding:11px 14px;font-size:13px;color:var(--ink-2);line-height:1.55;
+}
+.tip b{color:var(--ink);font-weight:600}
+.tip .ic{color:var(--gold);flex-shrink:0}
+.checkin{
+  grid-column:1/-1;display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+  padding-top:4px;
+}
+.cbtn{
+  display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line-2);
+  background:var(--surface);color:var(--ink);font-weight:500;font-size:13.5px;
+  padding:9px 15px;border-radius:9px;transition:.15s;
+}
+.cbtn:hover{border-color:var(--ink-3)}
+.cbtn.done{background:var(--lab);border-color:var(--lab);color:#fff}
+.checkin .when{font-size:12.5px;color:var(--ink-3)}
+.empty{text-align:center;padding:54px 20px;color:var(--ink-3)}
+.empty .ic{font-size:30px;opacity:.5}
+
+/* ---------- progress view ---------- */
+.pg-top{display:grid;grid-template-columns:auto 1fr;gap:26px;align-items:center;
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+  padding:24px 26px;margin-bottom:18px}
+@media(max-width:600px){.pg-top{grid-template-columns:1fr;text-align:center;gap:18px}}
+.ring-big{position:relative;width:128px;height:128px;justify-self:center}
+.ring-big .lbl{position:absolute;inset:0;display:grid;place-content:center;text-align:center}
+.ring-big .num{font-family:var(--display);font-weight:700;font-size:30px;line-height:1}
+.ring-big .cap{font-size:11.5px;color:var(--ink-2);margin-top:3px}
+.pg-head h2{font-family:var(--display);font-weight:600;font-size:21px;margin:0 0 4px;letter-spacing:-.3px}
+.pg-head p{margin:0;color:var(--ink-2);font-size:14px}
+.nextup{margin-top:14px;display:flex;align-items:center;gap:11px;background:var(--gold-soft);border-radius:10px;padding:11px 14px}
+.nextup .k{font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--gold)}
+.nextup .v{font-weight:500;font-size:14px;color:var(--ink);font-family:var(--display)}
+.nextup .d{margin-left:auto;font-family:var(--mono);font-size:12px;color:var(--ink-2)}
+
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:11px;margin-bottom:18px}
+@media(max-width:600px){.stats{grid-template-columns:repeat(2,1fr)}}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-sm);padding:15px 17px}
+.stat .n{font-family:var(--display);font-weight:700;font-size:26px;line-height:1}
+.stat .l{font-size:12.5px;color:var(--ink-2);margin-top:5px}
+.stat.due .n{color:var(--gold)}
+
+.startrow{display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:var(--surface);
+  border:1px solid var(--line);border-radius:var(--radius-sm);padding:13px 17px;margin-bottom:18px}
+.startrow label{font-size:13.5px;color:var(--ink-2);font-weight:500}
+.startrow input[type=date]{
+  font-family:var(--body);font-size:13.5px;border:1px solid var(--line-2);
+  border-radius:8px;padding:7px 10px;color:var(--ink);background:var(--surface);
+}
+.startrow .hint{font-size:12.5px;color:var(--ink-3)}
+
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:20px 22px;margin-bottom:18px}
+.panel h3{font-family:var(--display);font-weight:600;font-size:15px;margin:0 0 15px;letter-spacing:-.2px}
+.wbars{display:flex;flex-direction:column;gap:11px}
+.wbar{display:grid;grid-template-columns:96px 1fr 44px;align-items:center;gap:12px}
+@media(max-width:520px){.wbar{grid-template-columns:80px 1fr 38px}}
+.wbar .nm{font-size:13px;font-weight:500;display:flex;align-items:center;gap:7px}
+.wbar .nm::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--pc)}
+.wbar .track{height:9px;border-radius:5px;background:var(--surface-2);overflow:hidden}
+.wbar .track i{display:block;height:100%;background:var(--pc);width:0;border-radius:5px;transition:width .5s}
+.wbar .v{font-family:var(--mono);font-size:12px;color:var(--ink-2);text-align:right}
+
+.grid-key{display:flex;gap:16px;flex-wrap:wrap;margin:0 0 16px;font-size:12px;color:var(--ink-2)}
+.grid-key span{display:inline-flex;align-items:center;gap:6px}
+.grid-key i{width:12px;height:12px;border-radius:3px;display:inline-block}
+.gridmap{display:flex;flex-direction:column;gap:7px}
+.gmrow{display:grid;grid-template-columns:42px repeat(5,1fr);gap:7px;align-items:center}
+.gmrow .rl{font-size:11.5px;font-weight:600;color:var(--ink-2);display:flex;align-items:center;gap:5px}
+.gmrow .rl::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--pc)}
+.cell{
+  aspect-ratio:1.7/1;border-radius:8px;border:1.5px solid var(--line-2);background:var(--surface);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;
+  transition:.15s;padding:3px;position:relative;
+}
+.cell:hover{border-color:var(--ink-3);transform:translateY(-1px)}
+.cell .dl{font-family:var(--display);font-weight:600;font-size:12px;color:var(--ink-2)}
+.cell .dd{font-family:var(--mono);font-size:9px;color:var(--ink-3)}
+.cell.done{background:var(--pc);border-color:var(--pc)}
+.cell.done .dl,.cell.done .dd{color:#fff}
+.cell.today{box-shadow:0 0 0 2px var(--gold)}
+.cell.done .tick{position:absolute;top:3px;right:4px;color:rgba(255,255,255,.9);font-size:10px}
+.resetrow{text-align:center;margin-top:8px}
+.resetrow button{border:1px solid var(--line-2);background:var(--surface);color:var(--ink-2);font-size:12.5px;padding:7px 14px;border-radius:8px;font-weight:500}
+.resetrow button:hover{border-color:var(--exam);color:var(--exam)}
+
+.foot{text-align:center;color:var(--ink-3);font-size:12px;margin-top:30px;line-height:1.6}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap bar">
+    <div class="brand">
+      <div class="logo">F8</div>
+      <div>
+        <h1>Fabric in 8 weeks</h1>
+        <p>Microsoft Fabric study planner · <span class="accent">DP-600</span> certification</p>
+      </div>
+    </div>
+    <div class="hdr-right">
+      <div class="mini-ring" id="miniRing"></div>
+      <div class="toggle" role="tablist">
+        <button id="tabPlan" class="on" role="tab">Plan</button>
+        <button id="tabProgress" role="tab">Progress</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ PLAN VIEW ============ -->
+  <section class="view show" id="planView">
+    <div class="rail">
+      <div class="rail-scroll" id="weekRail"></div>
+    </div>
+
+    <div class="filters">
+      <button class="chip on" data-type="all">All</button>
+      <button class="chip" data-type="learn">Learn</button>
+      <button class="chip" data-type="lab">Lab</button>
+      <button class="chip" data-type="review">Review</button>
+      <button class="chip" data-type="exam">Exam prep</button>
+      <span class="sep"></span>
+      <label class="switch"><input type="checkbox" id="hideDone"><span class="track"></span>Hide completed</label>
+      <button class="linkbtn" id="expandAll">Expand all</button>
+      <button class="linkbtn" id="collapseAll">Collapse all</button>
+    </div>
+
+    <div id="phaseBanner"></div>
+    <div class="days" id="dayList"></div>
+  </section>
+
+  <!-- ============ PROGRESS VIEW ============ -->
+  <section class="view" id="progressView">
+    <div class="pg-top">
+      <div class="ring-big" id="bigRing"></div>
+      <div class="pg-head">
+        <h2 id="pgTitle">Your progress</h2>
+        <p id="pgSub">Check in on each day as you finish it. Everything saves in this browser.</p>
+        <div class="nextup" id="nextUp"></div>
+      </div>
+    </div>
+
+    <div class="stats" id="statCards"></div>
+
+    <div class="startrow">
+      <label for="startDate">Plan start date</label>
+      <input type="date" id="startDate">
+      <span class="hint">Pick a Monday — weekdays fill Mon–Fri, weekends stay as buffer.</span>
+    </div>
+
+    <div class="panel">
+      <h3>Progress by week</h3>
+      <div class="wbars" id="weekBars"></div>
+    </div>
+
+    <div class="panel">
+      <h3>Every day at a glance</h3>
+      <div class="grid-key">
+        <span><i style="background:var(--line-2)"></i> Not done</span>
+        <span><i style="background:var(--ink-2)"></i> Completed</span>
+        <span><i style="background:var(--surface);box-shadow:0 0 0 2px var(--gold)"></i> Today's task</span>
+        <span style="color:var(--ink-3)">Tap any day to check it off</span>
+      </div>
+      <div class="gridmap" id="gridMap"></div>
+      <div class="resetrow"><button id="resetBtn">Reset all check-ins</button></div>
+    </div>
+  </section>
+
+  <p class="foot">
+    Built for a focused 8-week run · 1 hour/day · 5 days/week.<br>
+    Progress is stored locally in your browser — bookmark this file and reopen it anytime.
+  </p>
+</main>
+
+<script>
+/* ---------------- DATA ---------------- */
+const PHASES = {
+  1:{name:"Foundation",      color:"var(--p1)", soft:"var(--p1-soft)", ink:"#0A5D4A", blurb:"OneLake, Lakehouse & how Fabric fits together"},
+  2:{name:"Data Engineering",color:"var(--p2)", soft:"var(--p2-soft)", ink:"#3A338F", blurb:"PySpark notebooks, pipelines & Dataflows Gen2"},
+  3:{name:"Warehouse & BI",  color:"var(--p3)", soft:"var(--p3-soft)", ink:"#8C381E", blurb:"Fabric Warehouse, T-SQL & Power BI Direct Lake"},
+  4:{name:"Governance & Exam",color:"var(--p4)",soft:"var(--p4-soft)", ink:"#274C76", blurb:"Admin, security, governance & DP-600 prep"}
+};
+const WEEK_TITLES = {
+  1:"Platform orientation & OneLake", 2:"Delta Lake & notebook orientation",
+  3:"PySpark data transformation", 4:"Data Factory — pipelines & Dataflows Gen2",
+  5:"Fabric Data Warehouse", 6:"Power BI in Fabric — what's new",
+  7:"Administration, governance & security", 8:"Full revision & practice tests"
+};
+function phaseOf(w){return w<=2?1:w<=4?2:w<=6?3:4;}
+
+const DAYS = [
+/* ---- WEEK 1 ---- */
+{w:1,d:1,type:"learn",title:"What is Microsoft Fabric?",sub:"Monday · platform orientation",
+ coverLabel:"What to cover",cover:[
+  "Fabric vs Azure — it's a SaaS platform, not just rebranded Azure services",
+  "The 6 workloads — Data Engineering, Data Factory, Data Science, Data Warehouse, Real-Time Intelligence, Power BI",
+  "Workspaces and capacities — how Fabric is licensed (F SKUs vs P SKUs)",
+  "How OneLake sits at the center — one lake per tenant, all workloads share it",
+  "Fabric vs classic Power BI Premium — what changed, what stayed"],
+ res:["MS Learn: <em>Introduction to end-to-end analytics using Microsoft Fabric</em> — first 3 units",
+  "YouTube: Guy in a Cube — <em>Microsoft Fabric, what is it?</em> (~15 min)",
+  "Skim the DP-600 skill area outline so you know what the exam expects"],
+ tip:{b:"Power BI connection",t:"Fabric is the platform Power BI now lives inside, not the other way around. Your workspace knowledge maps directly — the shift is that a workspace now holds items from every workload, not just reports and datasets."}},
+{w:1,d:2,type:"learn",title:"OneLake deep dive",sub:"Tuesday · core concept",
+ coverLabel:"What to cover",cover:[
+  "OneLake = one data lake per tenant, always on, built on ADLS Gen2",
+  "Delta Parquet format — why Fabric stores everything as Delta",
+  "OneLake File Explorer — mount OneLake as a Windows drive and browse it",
+  "Shortcuts — internal (Lakehouse → Lakehouse) vs external (S3, ADLS, GCS)",
+  "No data duplication — how shortcuts enable virtual access without copying"],
+ res:["MS Learn: <em>Introduction to OneLake</em> — full module",
+  "YouTube: Pragmatic Works — <em>OneLake explained</em>",
+  "Download OneLake File Explorer today so it's ready for Day 3's lab"],
+ tip:{b:"Exam focus",t:"Shortcuts are one of the most-tested OneLake topics. Know the difference: a shortcut is a virtual pointer (no copy); a pipeline Copy activity actually moves data."}},
+{w:1,d:3,type:"lab",title:"First lab — workspace, Lakehouse & OneLake",sub:"Wednesday · trial tenant",
+ coverLabel:"Lab steps",cover:[
+  "Sign into your Fabric trial at app.fabric.microsoft.com",
+  "Create a workspace named \"FabricLearning\" — note the Trial capacity",
+  "Create a Lakehouse inside it called \"BronzeLakehouse\"",
+  "Upload a sample sales/HR CSV into the Files section",
+  "Explore the UI — Files vs Tables, SQL analytics endpoint, settings",
+  "Open OneLake File Explorer and confirm your CSV is visible",
+  "Create an internal shortcut to a folder in the same Lakehouse"],
+ res:["Observe how all items live inside one workspace",
+  "Notice the SQL analytics endpoint that auto-appears on every Lakehouse",
+  "See how File Explorer mirrors the browser UI exactly"],
+ tip:{b:"Don't rush",t:"Spend the last 10 minutes just clicking around — workspace settings, capacity settings, lineage view. Familiarity now pays off in every later lab."}},
+{w:1,d:4,type:"learn",title:"Lakehouse vs Warehouse & the medallion pattern",sub:"Thursday · decision framework",
+ coverLabel:"What to cover",cover:[
+  "Lakehouse = file-first (Delta), schema-on-read, notebook/Spark access",
+  "Warehouse = SQL-first, structured, T-SQL only",
+  "When to use Lakehouse: raw ingestion, semi-structured data, Spark, ML prep",
+  "When to use Warehouse: curated star schema, SQL-only teams, BI source",
+  "Medallion — Bronze (raw) → Silver (cleaned) → Gold (modeled)",
+  "SQL analytics endpoint — read-only T-SQL on Delta tables without a Warehouse"],
+ res:["MS Learn: <em>Get started with lakehouses in Microsoft Fabric</em> — units 3–5",
+  "YouTube: Pragmatic Works — <em>Lakehouse vs Warehouse in Fabric</em>",
+  "Sketch the medallion pattern on paper — Bronze/Silver/Gold with arrows"],
+ tip:{b:"Exam focus",t:"This is a high-frequency scenario question. Rule of thumb: messy/raw or needs Spark → Lakehouse; structured and SQL teams query it → Warehouse."}},
+{w:1,d:5,type:"lab",title:"Consolidation lab — build a medallion structure",sub:"Friday · hands-on recap",
+ coverLabel:"Lab steps",cover:[
+  "Create \"SilverLakehouse\" and \"GoldLakehouse\" in your workspace",
+  "Move your CSV into a subfolder \"raw/sales/\" in BronzeLakehouse",
+  "Create a shortcut in SilverLakehouse pointing to that raw folder",
+  "Open the SQL analytics endpoint and run a simple SELECT on the CSV",
+  "View workspace lineage (Settings → Lineage view)",
+  "Write 3 things you learned and 2 things still unclear"],
+ res:["Checkpoint — you now know what Fabric is and how it differs from PBI Premium",
+  "What OneLake is and how shortcuts work",
+  "How to create a workspace + Lakehouse; when to use Lakehouse vs Warehouse"],
+ tip:{b:"Into week 2",t:"You'll build on this exact workspace — BronzeLakehouse becomes the source for your first notebook next week. Don't delete anything."}},
+
+/* ---- WEEK 2 ---- */
+{w:2,d:1,type:"learn",title:"Delta Lake fundamentals",sub:"Monday · core concept",
+ coverLabel:"What to cover",cover:[
+  "Delta Lake = a storage layer adding reliability to Parquet. Every Lakehouse table is Delta.",
+  "ACID transactions — multiple pipelines can write the same table without corruption",
+  "Transaction log (_delta_log) — every write appends a JSON entry; powers rollback",
+  "Time travel — query a past version with <code>VERSION AS OF</code>",
+  "Schema evolution — add columns without breaking readers (<code>mergeSchema</code>)",
+  "OPTIMIZE & Z-ordering — compact small files for faster reads"],
+ res:["MS Learn: <em>Work with Delta Lake tables in Microsoft Fabric</em> — full module",
+  "YouTube: Pragmatic Works — <em>Delta Lake explained</em>",
+  "Browse a Delta table → \"View files\" to see the real _delta_log folder"],
+ tip:{b:"Exam focus",t:"Know what VACUUM does (removes old files past the retention threshold) and why running it too aggressively breaks time travel."}},
+{w:2,d:2,type:"learn",title:"Intro to Fabric notebooks",sub:"Tuesday · orientation",
+ coverLabel:"What to cover",cover:[
+  "Notebooks run on Apache Spark — like Jupyter, integrated with OneLake",
+  "Spark session — why the first cell takes ~30–60s (session startup)",
+  "Cell types — Code (PySpark/Python/SQL/Scala), Markdown, Raw",
+  "Magic commands — <code>%%sql</code>, <code>%%pyspark</code>, <code>%run</code>",
+  "notebookutils — <code>notebookutils.fs.ls()</code>, <code>notebookutils.notebook.run()</code>",
+  "Attaching a Lakehouse — the left panel gives the notebook OneLake access"],
+ res:["MS Learn: <em>Use Apache Spark in Microsoft Fabric</em> — units 1–3",
+  "YouTube: Guy in a Cube — <em>Getting started with notebooks in Fabric</em>",
+  "MS Docs: skim the notebookutils reference"],
+ tip:{b:"Your context",t:"If you've used Jupyter, the interface feels familiar. The key difference is the left-side Lakehouse panel — it connects the notebook to OneLake, replacing hardcoded ADLS paths."}},
+{w:2,d:3,type:"lab",title:"First notebook — read a CSV, show a DataFrame",sub:"Wednesday · hands-on",
+ coverLabel:"Lab steps",cover:[
+  "Create a Notebook \"Week2_Lab\" and attach BronzeLakehouse",
+  "List files to confirm the CSV is there",
+  "Read the CSV into a DataFrame and display it",
+  "Check the schema — note inferred types (dates often infer as strings)",
+  "Run a SQL cell with a magic command",
+  "Add a Markdown cell documenting each step"],
+ res:["Notice the ~30–60s first-run delay = Spark startup, not slow code",
+  "The interactive display() output is sortable and filterable",
+  "Click \"View Spark jobs\" to see the execution plan"],
+ code:[
+  {l:"List files in the Lakehouse",c:'notebookutils.fs.ls("Files/raw/sales/")'},
+  {l:"Read the CSV into a DataFrame",c:'df = (spark.read\n    .option("header", True)\n    .option("inferSchema", True)\n    .csv("Files/raw/sales/your_file.csv"))\ndf.display()'},
+  {l:"Inspect the schema",c:'df.printSchema()'},
+  {l:"Try a SQL cell",c:'%%sql\nSELECT * FROM BronzeLakehouse.sales_table LIMIT 10'}],
+ tip:{b:"If it errors",t:"Adjust the file path to match where your CSV sits. Use <code>notebookutils.fs.ls(\"Files/\")</code> to browse and find the correct path."}},
+{w:2,d:4,type:"review",title:"End-to-end demo consolidation",sub:"Thursday · visual reinforcement",
+ coverLabel:"What to watch & do",cover:[
+  "Watch: Pragmatic Works — <em>Microsoft Fabric end-to-end tutorial</em> (~30–40 min)",
+  "Note every concept you've already touched in weeks 1–2",
+  "Revisit the DP-600 skills outline and check off what you now grasp",
+  "Go back to Week2_Lab and comment every cell in your own words"],
+ res:["Solidify: how notebook, Lakehouse & pipeline relate in a real workflow",
+  "Why Direct Lake beats Import (reads Delta directly, no refresh)",
+  "The full flow: raw file → Bronze → notebook → Silver/Gold → Power BI"],
+ tip:{b:"Why review mid-plan",t:"Weeks 1–2 pile on new vocabulary fast. Watching an end-to-end build now ties it together before week 3 goes deeper into PySpark. It's consolidation, not rest."}},
+{w:2,d:5,type:"lab",title:"Capstone — medallion in notebooks",sub:"Friday · capstone lab",
+ coverLabel:"Lab steps",cover:[
+  "Create notebook \"Medallion_Lab\", attach BronzeLakehouse",
+  "Bronze read: load the raw CSV into a DataFrame",
+  "Silver: apply 2+ transformations, write a Delta table to SilverLakehouse",
+  "Gold: read Silver, group + aggregate, write to GoldLakehouse",
+  "Verify time travel on the Silver table",
+  "Confirm the Gold table appears in the Lakehouse UI"],
+ res:["Checkpoint — what Delta Lake is and why Fabric uses it",
+  "How to run a notebook, attach a Lakehouse, use notebookutils",
+  "How to read a file and write a Delta table; run a VERSION AS OF query"],
+ code:[
+  {l:"Write a cleaned Silver Delta table",c:'(df_clean.write.format("delta")\n    .mode("overwrite")\n    .saveAsTable("SilverLakehouse.sales_clean"))'},
+  {l:"Query an earlier version (time travel)",c:'spark.sql("""\n  SELECT * FROM SilverLakehouse.sales_clean\n  VERSION AS OF 0\n""").display()'}],
+ tip:{b:"Into week 3",t:"You'll deepen PySpark using this exact medallion structure. The Silver and Gold tables are your week 3 starting point — keep the workspace intact."}},
+
+/* ---- WEEK 3 ---- */
+{w:3,d:1,type:"learn",title:"PySpark essentials",sub:"Monday · core skill",
+ coverLabel:"What to cover",cover:[
+  "DataFrame basics — the central object you'll work with all week",
+  "Reading & writing — <code>spark.read</code>, <code>.write</code>, save modes",
+  "Core transforms — <code>select</code>, <code>filter</code>, <code>withColumn</code>, <code>drop</code>",
+  "Joins & aggregation — <code>join</code>, <code>groupBy</code>, <code>agg</code>",
+  "Lazy evaluation — transformations are deferred until an action runs"],
+ res:["MS Learn: <em>Transform data with Apache Spark in Microsoft Fabric</em>",
+  "YouTube: Pragmatic Works — PySpark for Fabric beginners",
+  "Keep the PySpark DataFrame API docs open as a reference"],
+ tip:{b:"Your level",t:"You read code well, so focus on what each function does, not on memorizing syntax. You'll copy-and-adapt rather than author from scratch — that's enough for both the job and DP-600."}},
+{w:3,d:2,type:"lab",title:"Transform raw → clean Delta table",sub:"Tuesday · hands-on",
+ coverLabel:"Lab steps",cover:[
+  "Read your Bronze CSV into a DataFrame",
+  "Filter out invalid rows (e.g. null keys, negative amounts)",
+  "Rename columns to clean, consistent names",
+  "Cast a date column from string to date type",
+  "Write the result as a Delta table to SilverLakehouse"],
+ res:["Watch how transformations chain without running until you call display/write",
+  "Compare the cleaned schema to the raw inferred schema",
+  "Confirm the Silver table appears under Tables in the Lakehouse"],
+ code:[
+  {l:"Clean and reshape",c:'from pyspark.sql.functions import col, to_date\n\nclean = (df\n  .filter(col("amount") > 0)\n  .withColumnRenamed("cust_id", "customer_id")\n  .withColumn("order_date", to_date(col("order_date"), "yyyy-MM-dd")))\nclean.display()'}],
+ tip:{b:"Habit",t:"Build transformations one cell at a time and display() after each. It makes debugging far easier than chaining everything into one block."}},
+{w:3,d:3,type:"learn",title:"Writing to Lakehouse tables",sub:"Wednesday · concept",
+ coverLabel:"What to cover",cover:[
+  "Managed vs external tables — who owns the underlying files",
+  "Save modes — <code>overwrite</code>, <code>append</code>, <code>error</code>, <code>ignore</code>",
+  "Partitioning — <code>partitionBy</code> and when it helps (and hurts)",
+  "saveAsTable vs save — registering a table vs writing files only",
+  "How written tables show up in the SQL analytics endpoint automatically"],
+ res:["MS Learn: <em>Ingest data with Spark and Microsoft Fabric notebooks</em>",
+  "MS Docs: Lakehouse table management",
+  "Try both overwrite and append on a test table to see the difference"],
+ tip:{b:"Exam focus",t:"Know when partitioning helps: high-cardinality columns are a trap. Partition by low-cardinality columns you filter on often (e.g. year), not by something like customer_id."}},
+{w:3,d:4,type:"learn",title:"Notebook best practices",sub:"Thursday · production patterns",
+ coverLabel:"What to cover",cover:[
+  "Parameter cells — toggle a cell as Parameters so pipelines can pass values",
+  "Modularity — <code>%run</code> and <code>notebookutils.notebook.run()</code> to chain notebooks",
+  "Error handling — exit codes with <code>notebookutils.notebook.exit()</code>",
+  "Reusing logic — define functions, avoid copy-paste across cells",
+  "Spark config basics — when to care about partitions and shuffle"],
+ res:["MS Learn: <em>Use notebooks in pipelines</em> section",
+  "MS Docs: notebookutils reference (notebook + fs modules)",
+  "YouTube: a short clip on parameterizing Fabric notebooks"],
+ tip:{b:"Looking ahead",t:"Parameter cells matter next week — that's how a Data Factory pipeline passes a date or filename into your notebook at runtime."}},
+{w:3,d:5,type:"lab",title:"Multi-step ingest → clean → Silver",sub:"Friday · capstone",
+ coverLabel:"Lab steps",cover:[
+  "Build a notebook with a Parameters cell (e.g. a source filename)",
+  "Step 1: read the raw file referenced by the parameter",
+  "Step 2: clean and validate the data",
+  "Step 3: write a partitioned Delta table to SilverLakehouse",
+  "Add Markdown headers between sections so the notebook reads top-to-bottom"],
+ res:["Checkpoint — comfortable reading, transforming and writing with PySpark",
+  "Understand managed vs external tables and save modes",
+  "Can parameterize a notebook for reuse"],
+ tip:{b:"Into week 4",t:"This parameterized notebook becomes a building block you'll orchestrate inside a Data Factory pipeline."}},
+
+/* ---- WEEK 4 ---- */
+{w:4,d:1,type:"learn",title:"Data Factory in Fabric",sub:"Monday · orientation",
+ coverLabel:"What to cover",cover:[
+  "Pipelines vs Dataflows Gen2 vs notebooks — when to reach for each",
+  "Pipeline activities — Copy data, notebook, dataflow, lookup, conditionals",
+  "Triggers & scheduling — on-demand vs scheduled runs",
+  "Parameters & variables — passing values between activities",
+  "How this compares to Azure Data Factory (similar concepts, Fabric-native)"],
+ res:["MS Learn: <em>Use Data Factory pipelines in Microsoft Fabric</em>",
+  "YouTube: Guy in a Cube — pipelines in Fabric overview",
+  "Note the decision matrix: low-code copy → pipeline; transform → dataflow/notebook"],
+ tip:{b:"Decision rule",t:"Pipelines orchestrate and move; Dataflows Gen2 transform with Power Query; notebooks transform with code. Most real solutions use a pipeline to tie the other two together."}},
+{w:4,d:2,type:"lab",title:"Build a pipeline with Copy data",sub:"Tuesday · hands-on",
+ coverLabel:"Lab steps",cover:[
+  "Create a Data pipeline in your workspace",
+  "Add a Copy data activity — pick a source (web/sample) and Lakehouse sink",
+  "Map columns and run the activity manually",
+  "Add a parameter (e.g. a target table name)",
+  "Add a schedule trigger, then disable it after testing"],
+ res:["Watch the run history and activity output tabs",
+  "Inspect the monitoring view for duration and row counts",
+  "See how the copied data lands in your Lakehouse Files/Tables"],
+ tip:{b:"Watch the cost",t:"On a trial capacity, leave schedules off after testing. Scheduled refreshes consume capacity units even when you're not watching."}},
+{w:4,d:3,type:"learn",title:"Dataflows Gen2",sub:"Wednesday · your strength",
+ coverLabel:"What to cover",cover:[
+  "Dataflows Gen2 vs classic dataflows — output destinations are the big change",
+  "Power Query Online inside Fabric — the same M engine you already know",
+  "Output destinations — Lakehouse, Warehouse, KQL, SQL DB",
+  "Staging — how Gen2 stages data before loading the destination",
+  "When to choose a dataflow over a notebook (no-code transforms, reuse)"],
+ res:["MS Learn: <em>Ingest data with Dataflows Gen2 in Microsoft Fabric</em>",
+  "YouTube: Pragmatic Works — Dataflows Gen2 walkthrough",
+  "Map your existing dataflow/M knowledge onto the Gen2 differences"],
+ tip:{b:"Your advantage",t:"This is where your Power Query and dataflows experience pays off directly. Focus only on what's new: output destinations and the staging behavior."}},
+{w:4,d:4,type:"lab",title:"Dataflow Gen2 → Lakehouse table",sub:"Thursday · hands-on",
+ coverLabel:"Lab steps",cover:[
+  "Create a Dataflow Gen2 in your workspace",
+  "Connect to a source and apply Power Query transforms (filter, merge, derive)",
+  "Set the output destination to a Lakehouse table",
+  "Publish and run the dataflow",
+  "Verify the table in the Lakehouse and check the refresh history"],
+ res:["Notice how familiar the Power Query editor feels",
+  "Observe the staging step before the final load",
+  "Compare the effort here vs the PySpark approach from week 3"],
+ tip:{b:"Reflection",t:"You've now transformed the same kind of data two ways — code (notebook) and no-code (dataflow). Knowing when to use each is exactly what DP-600 scenario questions test."}},
+{w:4,d:5,type:"lab",title:"Orchestrate it all in a pipeline",sub:"Friday · capstone",
+ coverLabel:"Lab steps",cover:[
+  "Create a pipeline that runs your week-3 notebook via a Notebook activity",
+  "Add a Dataflow activity to run your week-4 dataflow",
+  "Chain them with on-success dependencies",
+  "Pass a parameter from the pipeline into the notebook",
+  "Run end-to-end and review the monitoring output"],
+ res:["Checkpoint — can build pipelines, dataflows and orchestrate notebooks",
+  "Understand the three transform approaches and when to use each",
+  "Comfortable passing parameters between pipeline activities"],
+ tip:{b:"Into week 5",t:"You've now got data landing cleanly in the Lakehouse. Next week you'll add a SQL-first Warehouse and learn how the two query surfaces differ."}},
+
+/* ---- WEEK 5 ---- */
+{w:5,d:1,type:"learn",title:"Fabric Warehouse architecture",sub:"Monday · core concept",
+ coverLabel:"What to cover",cover:[
+  "What the Warehouse is — a fully managed, T-SQL, scale-out warehouse",
+  "How it differs from the Lakehouse SQL endpoint (read-only) — Warehouse is read/write T-SQL",
+  "Distributed compute — query processing across nodes (no manual tuning)",
+  "Automatic statistics — the engine maintains stats for you",
+  "No traditional indexes — a key difference from SQL Server you know"],
+ res:["MS Learn: <em>Get started with data warehouses in Microsoft Fabric</em>",
+  "YouTube: Guy in a Cube — Fabric Warehouse overview",
+  "Contrast mentally with your SQL Server background — what's gone, what's new"],
+ tip:{b:"Your advantage",t:"Your T-SQL and SQL Server depth transfers directly. The mindset shift: no index tuning, no manual stats — the engine handles physical optimization."}},
+{w:5,d:2,type:"lab",title:"Create a Warehouse, write T-SQL",sub:"Tuesday · hands-on",
+ coverLabel:"Lab steps",cover:[
+  "Create a Warehouse item in your FabricLearning workspace",
+  "Ingest data (COPY INTO, or via a pipeline from your Lakehouse)",
+  "Write a few SELECT queries in the web SQL editor",
+  "Create a view over a base table",
+  "Create a simple stored procedure"],
+ res:["Notice the familiar SSMS-like editing experience",
+  "See that you can also connect via SSMS / Azure Data Studio",
+  "Observe how results and query plans surface in the editor"],
+ code:[
+  {l:"Load files into a table",c:'COPY INTO dbo.sales\nFROM \'https://.../sales/*.parquet\'\nWITH (FILE_TYPE = \'PARQUET\');'},
+  {l:"Create a view",c:'CREATE VIEW dbo.v_sales_summary AS\nSELECT region, SUM(amount) AS total\nFROM dbo.sales\nGROUP BY region;'}],
+ tip:{b:"Cross-item",t:"From a Warehouse you can query Lakehouse tables too — they show up through the shared SQL surface. You'll do this tomorrow."}},
+{w:5,d:3,type:"learn",title:"Cross-querying Lakehouse + Warehouse",sub:"Wednesday · concept",
+ coverLabel:"What to cover",cover:[
+  "The unified SQL surface — query across Warehouse and Lakehouse tables",
+  "Three-part naming — referencing items across the workspace",
+  "When data should live in the Warehouse vs stay in the Lakehouse",
+  "Read-only vs read-write — the Lakehouse SQL endpoint can't write",
+  "How Power BI will sit on top of either via Direct Lake (preview of week 6)"],
+ res:["MS Learn: cross-database querying in Fabric Warehouse",
+  "MS Docs: SQL analytics endpoint vs Warehouse comparison",
+  "Sketch which of your medallion tables belong in Warehouse vs Lakehouse"],
+ tip:{b:"Exam focus",t:"A common scenario: \"a SQL-only team needs to write transformations.\" That points to a Warehouse, because the Lakehouse SQL endpoint is read-only."}},
+{w:5,d:4,type:"lab",title:"Build a star schema",sub:"Thursday · hands-on",
+ coverLabel:"Lab steps",cover:[
+  "Design a simple star — one fact table, two or three dimensions",
+  "Create dimension tables with surrogate keys",
+  "Create the fact table referencing those keys",
+  "Populate from your Silver/Gold data using INSERT...SELECT",
+  "Write a query joining fact to dimensions for a summary"],
+ res:["Reinforce dimensional modeling you already know from Power BI",
+  "See how the warehouse star will feed a semantic model next week",
+  "Confirm row counts match expectations after loading"],
+ tip:{b:"Your advantage",t:"Star schema design is familiar territory from Power BI modeling — you're just building it in T-SQL upstream of the report this time."}},
+{w:5,d:5,type:"review",title:"Warehouse performance & recap",sub:"Friday · consolidation",
+ coverLabel:"What to cover",cover:[
+  "Statistics — automatic vs manually created, and why they matter",
+  "Result-set caching — repeat queries return fast",
+  "Query insights — the built-in views for monitoring query history",
+  "No indexes — reinforce how Fabric handles physical optimization",
+  "Recap: when Warehouse, when Lakehouse, when both"],
+ res:["Checkpoint — can create a Warehouse, write T-SQL, build a star schema",
+  "Understand cross-querying and the read-only Lakehouse endpoint",
+  "Know the basics of Warehouse performance tuning"],
+ tip:{b:"Into week 6",t:"Your Warehouse star schema is the perfect source for next week's Power BI work — you'll point a Direct Lake semantic model straight at it."}},
+
+/* ---- WEEK 6 ---- */
+{w:6,d:1,type:"learn",title:"Direct Lake mode",sub:"Monday · the big shift",
+ coverLabel:"What to cover",cover:[
+  "Direct Lake — reads Delta files directly, no import, no scheduled refresh",
+  "How it differs from Import (in-memory copy) and DirectQuery (live SQL)",
+  "Framing — how the model maps to the latest Delta data",
+  "Fallback to DirectQuery — when and why it happens",
+  "Limitations — what Direct Lake can't do (some modeling constraints)"],
+ res:["MS Learn: <em>Understand Direct Lake in Microsoft Fabric</em>",
+  "YouTube: Guy in a Cube — Direct Lake explained (multiple good clips)",
+  "MS Docs: Direct Lake vs Import vs DirectQuery comparison table"],
+ tip:{b:"Your biggest rewire",t:"This is the largest conceptual shift from classic Power BI. No import, no refresh schedule in the usual sense — the model reads current Delta files. Give this day full attention."}},
+{w:6,d:2,type:"lab",title:"Connect Power BI via Direct Lake",sub:"Tuesday · hands-on",
+ coverLabel:"Lab steps",cover:[
+  "From your Warehouse or Lakehouse, create a new semantic model",
+  "Add your star-schema tables and define relationships",
+  "Build a quick report on top of it",
+  "Compare load behavior to an equivalent Import model you've built before",
+  "Make a data change upstream and see it reflect without a refresh"],
+ res:["Feel the difference — no waiting on a dataset refresh",
+  "Confirm relationships behave like any other Power BI model",
+  "Notice the report authoring experience is unchanged"],
+ tip:{b:"Your advantage",t:"Report building, DAX and modeling are all things you already do well. Focus your attention purely on the Direct Lake connection behavior."}},
+{w:6,d:3,type:"learn",title:"Semantic models in Fabric",sub:"Wednesday · concept",
+ coverLabel:"What to cover",cover:[
+  "Default vs custom semantic models — what auto-generates and what you build",
+  "Editing models in the service and in Power BI Desktop",
+  "Endorsement — promoted vs certified models for governed reuse",
+  "OneLake integration — where the model and its data physically live",
+  "Lineage — tracing a report back through model, table, source"],
+ res:["MS Learn: <em>Design and build semantic models in Fabric</em>",
+  "MS Docs: endorsement and the semantic model lifecycle",
+  "Open the lineage view on your workspace and trace one report end-to-end"],
+ tip:{b:"Your advantage",t:"Centralized semantic models and endorsement map directly to the governed-reporting work on your resume. This is reinforcement, not new ground."}},
+{w:6,d:4,type:"learn",title:"Deployment pipelines & Git in Fabric",sub:"Thursday · ALM",
+ coverLabel:"What to cover",cover:[
+  "Fabric deployment pipelines — Dev → Test → Prod stages",
+  "How they compare to classic Power BI deployment pipelines",
+  "Git integration — connecting a workspace to a repo",
+  "Deployment rules — parameterizing data sources across stages",
+  "What's supported per item type (not everything is git-enabled yet)"],
+ res:["MS Learn: <em>Implement CI/CD in Microsoft Fabric</em>",
+  "MS Docs: Fabric Git integration overview",
+  "Relate to your existing Azure DevOps + Power BI REST API experience"],
+ tip:{b:"Your advantage",t:"You've already built CI/CD for Power BI with REST APIs and PowerShell. Fabric's native deployment pipelines and Git integration are a more managed version of the same idea."}},
+{w:6,d:5,type:"lab",title:"Publish a report on the star schema",sub:"Friday · capstone",
+ coverLabel:"Lab steps",cover:[
+  "Build a polished report on your Direct Lake semantic model",
+  "Add a couple of measures in DAX",
+  "Publish to your workspace",
+  "Set the model as Promoted (endorsement)",
+  "View lineage from report → model → warehouse tables"],
+ res:["Checkpoint — understand Direct Lake vs Import vs DirectQuery",
+  "Can build a semantic model and report on Lakehouse/Warehouse data",
+  "Know Fabric deployment pipelines and Git integration basics"],
+ tip:{b:"Into week 7",t:"You've now touched the full data-to-report stack. The last technical week covers who can see what, and how it's all governed."}},
+
+/* ---- WEEK 7 ---- */
+{w:7,d:1,type:"learn",title:"Admin portal & capacity",sub:"Monday · administration",
+ coverLabel:"What to cover",cover:[
+  "Fabric admin portal — tenant settings and where to find them",
+  "Capacity management — F SKUs, pausing/resuming, scaling",
+  "Capacity Metrics app — monitoring usage and throttling",
+  "Workload settings — enabling/disabling experiences per capacity",
+  "Smoothing & bursting — how Fabric handles spikes in demand"],
+ res:["MS Learn: <em>Administer Microsoft Fabric</em>",
+  "MS Docs: Fabric Capacity Metrics app",
+  "Relate to your existing Power BI tenant admin experience"],
+ tip:{b:"Your advantage",t:"You've done Power BI tenant administration already. Fabric admin extends the same portal — the new part is capacity (CU) management across all workloads."}},
+{w:7,d:2,type:"learn",title:"Security model",sub:"Tuesday · access control",
+ coverLabel:"What to cover",cover:[
+  "Workspace roles — Admin, Member, Contributor, Viewer (what each can do)",
+  "Item-level permissions — sharing individual items vs workspace access",
+  "OneLake data access — how permissions flow to underlying data",
+  "RLS, OLS, CLS in semantic models — row, object and column security",
+  "How a Lakehouse/Warehouse enforces SQL permissions"],
+ res:["MS Learn: <em>Secure data access in Microsoft Fabric</em>",
+  "MS Docs: workspace roles reference table",
+  "Map RLS knowledge from Power BI onto Fabric semantic models"],
+ tip:{b:"Exam focus",t:"Know the workspace-role table cold — scenario questions often ask which role to assign for a given task. Viewer can't edit; Contributor can't manage access."}},
+{w:7,d:3,type:"learn",title:"Governance & Purview",sub:"Wednesday · governance",
+ coverLabel:"What to cover",cover:[
+  "Microsoft Purview integration — the data catalog over Fabric",
+  "Sensitivity labels — classification that follows data through exports",
+  "Endorsement revisited — promoted/certified as a governance signal",
+  "Lineage — end-to-end tracing for impact analysis",
+  "Data loss prevention basics in the Fabric context"],
+ res:["MS Learn: <em>Govern data in Microsoft Fabric</em>",
+  "MS Docs: Purview hub in Fabric",
+  "Apply a sensitivity label to one of your items and trace where it shows"],
+ tip:{b:"Exam focus",t:"Sensitivity labels and endorsement are favorite governance topics. Know that labels persist when data is exported to Excel/PDF — that's their whole point."}},
+{w:7,d:4,type:"lab",title:"Hands-on governance lab",sub:"Thursday · hands-on",
+ coverLabel:"Lab steps",cover:[
+  "Assign workspace roles to a test user (or simulate the choices)",
+  "Apply a sensitivity label to a semantic model and a report",
+  "Promote a semantic model (endorsement)",
+  "Open the Capacity Metrics app and review usage",
+  "Trace lineage across one full report → model → source chain"],
+ res:["Reinforce the role table by actually assigning roles",
+  "See how labels surface across items",
+  "Get comfortable navigating the admin and metrics surfaces"],
+ tip:{b:"Wrapping the technical content",t:"After today you've touched every workload in your plan. The rest is consolidation and exam readiness."}},
+{w:7,d:5,type:"review",title:"DP-600 exam guide review",sub:"Friday · exam orientation",
+ coverLabel:"What to cover",cover:[
+  "Read the official DP-600 study guide end to end",
+  "Note the skill-area weightings — where the most questions come from",
+  "Understand the question formats (case studies, multi-select, ordering)",
+  "List your weakest areas from the last 7 weeks honestly",
+  "Schedule the exam for end of week 8 or the following week"],
+ res:["MS Learn: official DP-600 exam page and study guide",
+  "MS Learn: free DP-600 practice assessment (do a first pass)",
+  "Book a slot so the deadline is real"],
+ tip:{b:"Strategy",t:"The exam weights some areas more than others. Spend week 8 disproportionately on the heaviest-weighted skills and on your personal weak spots — not evenly across everything."}},
+
+/* ---- WEEK 8 ---- */
+{w:8,d:1,type:"exam",title:"Practice test 1 — baseline",sub:"Monday · exam prep",
+ coverLabel:"What to do",cover:[
+  "Take a full practice test (MS Learn free assessment or MeasureUp)",
+  "Don't study first — this is a baseline to find gaps",
+  "Mark every question you guessed, even if you got it right",
+  "Group wrong/guessed questions by skill area",
+  "Write down your 3 weakest areas"],
+ res:["MeasureUp or Whizlabs for exam-realistic questions",
+  "MS Learn free practice assessment as a starting point",
+  "Keep a running notes doc of every concept you miss"],
+ tip:{b:"Mindset",t:"A low baseline score is useful, not discouraging — it tells you exactly where this final week should go."}},
+{w:8,d:2,type:"exam",title:"Targeted revision",sub:"Tuesday · exam prep",
+ coverLabel:"What to do",cover:[
+  "Take your 3 weakest areas from yesterday",
+  "Re-read the relevant MS Learn modules for each",
+  "Redo the hands-on lab for anything that didn't stick conceptually",
+  "Re-attempt only the questions you missed",
+  "Update your notes doc with the corrected understanding"],
+ res:["MS Learn modules for your specific weak areas",
+  "Your own week 1–7 lab notebooks and notes",
+  "Short targeted YouTube clips for stubborn concepts"],
+ tip:{b:"Depth over breadth",t:"Don't re-study what you already know. One focused hour on a weak area beats skimming everything again."}},
+{w:8,d:3,type:"exam",title:"Practice test 2 — timed",sub:"Wednesday · exam prep",
+ coverLabel:"What to do",cover:[
+  "Take a second full test under real time pressure",
+  "Simulate exam conditions — no notes, one sitting",
+  "Compare your score and weak areas to test 1",
+  "Note any new patterns in the wrong answers",
+  "Decide if you're ready or need to push the date"],
+ res:["A different practice test set than Monday if possible",
+  "Time yourself strictly to build pacing",
+  "Review explanations for every wrong answer"],
+ tip:{b:"Pacing",t:"Running out of time is a common failure mode. This timed run is as much about pacing as it is about knowledge."}},
+{w:8,d:4,type:"exam",title:"Flash review — decision trees",sub:"Thursday · exam prep",
+ coverLabel:"What to do",cover:[
+  "Drill the key decision trees until they're automatic:",
+  "Lakehouse vs Warehouse — pick the storage item from a scenario",
+  "Notebook vs Dataflow vs Pipeline — pick the transform approach",
+  "Direct Lake vs Import vs DirectQuery — pick the connection mode",
+  "Workspace roles — pick the right role for a permission scenario"],
+ res:["Your notes doc — condense it to one page of decision rules",
+  "Re-skim Delta Lake terms (ACID, time travel, OPTIMIZE, VACUUM)",
+  "Quick pass over sensitivity labels and endorsement"],
+ tip:{b:"High yield",t:"Scenario questions almost always reduce to one of these decision trees. Getting them automatic is the single best use of this day."}},
+{w:8,d:5,type:"exam",title:"Final light review & rest",sub:"Friday · exam ready",
+ coverLabel:"What to do",cover:[
+  "Light pass over your one-page decision-rules sheet",
+  "Re-read only the notes that still feel shaky",
+  "Confirm exam logistics — time, check-in, environment",
+  "Stop studying early — rest matters more than cramming",
+  "Sit the exam at the end of this week or early next week"],
+ res:["Your condensed one-page summary only",
+  "No new material today",
+  "Good sleep before exam day"],
+ tip:{b:"You've earned this",t:"Eight weeks of structured study with hands-on labs is exactly the preparation DP-600 rewards. Trust the work and go in calm."}}
+];
+
+/* ---------------- STATE ---------------- */
+const LS_DONE='fabricPlannerDone_v1', LS_START='fabricPlannerStart_v1', LS_WEEK='fabricPlannerWeek_v1';
+let done = load(LS_DONE) || {};
+let startDate = load(LS_START) || defaultMonday();
+let curWeek = load(LS_WEEK) || 1;
+let curFilter = 'all';
+let hideDone = false;
+
+function load(k){try{return JSON.parse(localStorage.getItem(k));}catch(e){return null;}}
+function save(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+function id(w,d){return 'w'+w+'d'+d;}
+function defaultMonday(){
+  const t=new Date(); const day=t.getDay();
+  const add=(day===0?1:day===1?0:8-day); // roll forward to Monday
+  t.setDate(t.getDate()+add);
+  return t.toISOString().slice(0,10);
+}
+function addDays(iso,n){const d=new Date(iso+'T00:00:00');d.setDate(d.getDate()+n);return d;}
+function fmt(d){return d.toLocaleDateString(undefined,{month:'short',day:'numeric'});}
+function fmtFull(d){return d.toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'});}
+function schedDate(w,d){return addDays(startDate,(w-1)*7+(d-1));}
+function isToday(dt){const t=new Date();return dt.toDateString()===t.toDateString();}
+const TYPE_LABEL={learn:'Learn',lab:'Lab',review:'Review',exam:'Exam prep'};
+
+/* ---------------- RENDER: PLAN ---------------- */
+function renderRail(){
+  const rail=document.getElementById('weekRail'); rail.innerHTML='';
+  for(let w=1;w<=8;w++){
+    const ph=PHASES[phaseOf(w)];
+    const dl=DAYS.filter(x=>x.w===w);
+    const dn=dl.filter(x=>done[id(x.w,x.d)]).length;
+    const pct=Math.round(dn/dl.length*100);
+    const b=document.createElement('button');
+    b.className='wkpill'+(w===curWeek?' on':'');
+    b.style.setProperty('--pc',ph.color);
+    b.innerHTML=`<div class="ph">${ph.name}</div>
+      <div class="wk">Week ${w}</div>
+      <div class="dn">${dn}/${dl.length} done</div>
+      <div class="bar-mini"><i style="width:${pct}%"></i></div>`;
+    b.onclick=()=>{curWeek=w;save(LS_WEEK,w);renderRail();renderDays();};
+    rail.appendChild(b);
+  }
+}
+function renderBanner(){
+  const ph=PHASES[phaseOf(curWeek)];
+  const el=document.getElementById('phaseBanner');
+  el.className='phase-banner';
+  el.style.setProperty('--pc-soft',ph.soft);
+  el.style.setProperty('--pc-ink',ph.ink);
+  el.innerHTML=`<span class="tag">Phase ${phaseOf(curWeek)} · ${ph.name}</span>
+    <span class="txt">Week ${curWeek}: ${WEEK_TITLES[curWeek]} — ${ph.blurb}</span>`;
+}
+function renderDays(){
+  renderBanner();
+  const list=document.getElementById('dayList'); list.innerHTML='';
+  const ph=PHASES[phaseOf(curWeek)];
+  let days=DAYS.filter(x=>x.w===curWeek);
+  if(curFilter!=='all') days=days.filter(x=>x.type===curFilter);
+  if(hideDone) days=days.filter(x=>!done[id(x.w,x.d)]);
+  if(!days.length){
+    list.innerHTML=`<div class="empty"><div class="ic">✓</div><p>Nothing to show here.<br>Try a different filter or unhide completed days.</p></div>`;
+    return;
+  }
+  days.forEach(x=>{
+    const tid=id(x.w,x.d);
+    const isDone=!!done[tid];
+    const dt=schedDate(x.w,x.d);
+    const card=document.createElement('div');
+    card.className='card'+(isDone?' done':'');
+    card.style.setProperty('--pc',ph.color);
+    card.style.setProperty('--pc-soft',ph.soft);
+    card.style.setProperty('--pc-ink',ph.ink);
+
+    let codeHTML='';
+    if(x.code){codeHTML=x.code.map(c=>`<div style="margin-top:10px"><div style="font-size:12px;color:var(--ink-2);margin-bottom:2px">${c.l}</div><pre>${esc(c.c)}</pre></div>`).join('');}
+
+    card.innerHTML=`
+      <button class="card-head" aria-expanded="false">
+        <span class="daynum">D${x.d}</span>
+        <span class="headmeta">
+          <span class="t">${x.title}</span>
+          <span class="s">${x.sub}</span>
+        </span>
+        <span class="date-pill">${fmt(dt)}</span>
+        <span class="badge b-${x.type}">${TYPE_LABEL[x.type]}</span>
+        <span class="chev">▾</span>
+      </button>
+      <div class="body"><div class="body-inner">
+        <div class="sec">
+          <h4>${x.coverLabel}</h4>
+          <ul>${x.cover.map(i=>`<li><span>${i}</span></li>`).join('')}</ul>
+          ${codeHTML}
+        </div>
+        <div class="sec res">
+          <h4>Resources & checkpoints</h4>
+          <ul>${x.res.map(i=>`<li><span>${i}</span></li>`).join('')}</ul>
+        </div>
+        <div class="tip"><span class="ic">◆</span><span><b>${x.tip.b}.</b> ${x.tip.t}</span></div>
+        <div class="checkin">
+          <button class="cbtn${isDone?' done':''}" data-check="${tid}">
+            ${isDone?'✓ Completed':'Mark day complete'}
+          </button>
+          <span class="when">${isDone&&done[tid].on?'Checked in '+fmtFull(new Date(done[tid].on+'T00:00:00')):'Scheduled for '+fmtFull(dt)}</span>
+        </div>
+      </div></div>`;
+
+    const head=card.querySelector('.card-head');
+    head.onclick=(e)=>{
+      if(e.target.closest('[data-check]'))return;
+      card.classList.toggle('open');
+      head.setAttribute('aria-expanded',card.classList.contains('open'));
+    };
+    card.querySelector('[data-check]').onclick=()=>toggleDone(tid);
+    list.appendChild(card);
+  });
+}
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+/* ---------------- RENDER: PROGRESS ---------------- */
+function ring(pct,size,stroke,col){
+  const r=(size-stroke)/2, c=2*Math.PI*r, off=c*(1-pct/100);
+  return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
+    <circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="var(--surface-2)" stroke-width="${stroke}"/>
+    <circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="${col}" stroke-width="${stroke}"
+      stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${off}"
+      transform="rotate(-90 ${size/2} ${size/2})"/>
+  </svg>`;
+}
+function counts(){
+  const total=DAYS.length;
+  const dn=DAYS.filter(x=>done[id(x.w,x.d)]).length;
+  let dueSoFar=0;
+  DAYS.forEach(x=>{const dt=schedDate(x.w,x.d);dt.setHours(0,0,0,0);const t=new Date();t.setHours(0,0,0,0);if(dt<=t)dueSoFar++;});
+  return {total,dn,remaining:total-dn,pct:Math.round(dn/total*100),dueSoFar};
+}
+function nextIncomplete(){
+  for(const x of DAYS){if(!done[id(x.w,x.d)])return x;}
+  return null;
+}
+function renderMini(){
+  const c=counts();
+  document.getElementById('miniRing').innerHTML=
+    ring(c.pct,34,4,'var(--gold)')+
+    `<div><div class="pct">${c.pct}%</div><div class="lbl">${c.dn} of ${c.total} days</div></div>`;
+}
+function renderProgress(){
+  const c=counts();
+  document.getElementById('bigRing').innerHTML=
+    ring(c.pct,128,11,'var(--gold)')+
+    `<div class="lbl"><div class="num">${c.pct}%</div><div class="cap">complete</div></div>`;
+
+  const nx=nextIncomplete();
+  const nu=document.getElementById('nextUp');
+  if(nx){
+    nu.style.display='flex';
+    nu.innerHTML=`<span class="k">Next up</span>
+      <span class="v">Week ${nx.w} · Day ${nx.d} — ${nx.title}</span>
+      <span class="d">${fmt(schedDate(nx.w,nx.d))}</span>`;
+  } else {
+    nu.style.display='flex';
+    nu.innerHTML=`<span class="k">Done</span><span class="v">All 40 days complete — go sit the exam.</span>`;
+  }
+  document.getElementById('pgSub').textContent =
+    `You've completed ${c.dn} of ${c.total} days. By today's schedule, ${c.dueSoFar} ${c.dueSoFar===1?'day was':'days were'} due — you're ${c.dn>=c.dueSoFar?'on or ahead of pace.':'a little behind, catch up on buffer days.'}`;
+
+  document.getElementById('statCards').innerHTML=
+    stat(c.dn,'Days completed','')+
+    stat(c.remaining,'Days remaining','')+
+    stat(c.dueSoFar,'Due by today','due')+
+    stat(c.total,'Days in plan','');
+
+  // week bars
+  const wb=document.getElementById('weekBars'); wb.innerHTML='';
+  for(let w=1;w<=8;w++){
+    const ph=PHASES[phaseOf(w)];
+    const dl=DAYS.filter(x=>x.w===w);
+    const dn=dl.filter(x=>done[id(x.w,x.d)]).length;
+    const pct=Math.round(dn/dl.length*100);
+    const row=document.createElement('div');
+    row.className='wbar'; row.style.setProperty('--pc',ph.color);
+    row.innerHTML=`<span class="nm">Week ${w}</span>
+      <span class="track"><i style="width:${pct}%"></i></span>
+      <span class="v">${dn}/${dl.length}</span>`;
+    wb.appendChild(row);
+  }
+
+  // grid map
+  const gm=document.getElementById('gridMap'); gm.innerHTML='';
+  for(let w=1;w<=8;w++){
+    const ph=PHASES[phaseOf(w)];
+    const row=document.createElement('div');
+    row.className='gmrow'; row.style.setProperty('--pc',ph.color);
+    row.innerHTML=`<span class="rl">W${w}</span>`;
+    DAYS.filter(x=>x.w===w).forEach(x=>{
+      const tid=id(x.w,x.d);
+      const isDone=!!done[tid];
+      const dt=schedDate(x.w,x.d);
+      const cell=document.createElement('button');
+      cell.className='cell'+(isDone?' done':'')+(isToday(dt)?' today':'');
+      cell.style.setProperty('--pc',ph.color);
+      cell.title=`Week ${x.w} Day ${x.d} — ${x.title}\n${fmtFull(dt)}\n${isDone?'Completed':'Not done'}`;
+      cell.innerHTML=`${isDone?'<span class="tick">✓</span>':''}<span class="dl">D${x.d}</span><span class="dd">${fmt(dt)}</span>`;
+      cell.onclick=()=>toggleDone(tid);
+      row.appendChild(cell);
+    });
+    gm.appendChild(row);
+  }
+}
+function stat(n,l,cls){return `<div class="stat ${cls}"><div class="n">${n}</div><div class="l">${l}</div></div>`;}
+
+/* ---------------- ACTIONS ---------------- */
+function toggleDone(tid){
+  if(done[tid]) delete done[tid];
+  else done[tid]={done:true,on:new Date().toISOString().slice(0,10)};
+  save(LS_DONE,done);
+  refreshAll();
+}
+function refreshAll(){
+  renderMini();
+  if(document.getElementById('planView').classList.contains('show')){renderRail();renderDays();}
+  if(document.getElementById('progressView').classList.contains('show')){renderProgress();}
+}
+
+/* ---------------- WIRING ---------------- */
+function showView(which){
+  const plan=which==='plan';
+  document.getElementById('planView').classList.toggle('show',plan);
+  document.getElementById('progressView').classList.toggle('show',!plan);
+  document.getElementById('tabPlan').classList.toggle('on',plan);
+  document.getElementById('tabProgress').classList.toggle('on',!plan);
+  if(plan){renderRail();renderDays();} else {renderProgress();}
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+document.getElementById('tabPlan').onclick=()=>showView('plan');
+document.getElementById('tabProgress').onclick=()=>showView('progress');
+
+document.querySelectorAll('.chip').forEach(ch=>{
+  ch.onclick=()=>{
+    document.querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));
+    ch.classList.add('on'); curFilter=ch.dataset.type; renderDays();
+  };
+});
+document.getElementById('hideDone').onchange=(e)=>{hideDone=e.target.checked;renderDays();};
+document.getElementById('expandAll').onclick=()=>document.querySelectorAll('#dayList .card').forEach(c=>{c.classList.add('open');c.querySelector('.card-head').setAttribute('aria-expanded','true');});
+document.getElementById('collapseAll').onclick=()=>document.querySelectorAll('#dayList .card').forEach(c=>{c.classList.remove('open');c.querySelector('.card-head').setAttribute('aria-expanded','false');});
+
+const sd=document.getElementById('startDate');
+sd.value=startDate;
+sd.onchange=(e)=>{startDate=e.target.value||defaultMonday();save(LS_START,startDate);refreshAll();};
+
+document.getElementById('resetBtn').onclick=()=>{
+  if(confirm('Clear all your check-ins? This cannot be undone.')){done={};save(LS_DONE,done);refreshAll();}
+};
+
+/* ---------------- INIT ---------------- */
+renderMini();
+renderRail();
+renderDays();
+</script>
+</body>
+</html>
