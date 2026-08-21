@@ -108,6 +108,68 @@ Everything lives in one file: `<style>` block, HTML skeleton, then one `<script>
   gym-routine site. Public repo is required for free Pages; the planner holds no secrets.
 - The project context files (`CLAUDE.md`, `PLAN.md`) are committed to the repo alongside the app.
 
+## The eBook — "The Fabric Field Guide" (companion eTextbook)
+
+A **separate, self-contained `ebook.html`** in this same folder/repo — a deep, book-structured
+DP-600 study companion that grows one subtopic at a time. Reached from the planner via an **eBook
+button** in the header (top-right, next to the Plan/Progress toggle). Same design system as the
+planner (fonts, CSS-variable palette, phase colors), plus a full dark mode.
+
+**Why a separate file (decision):** kept out of `index.html` so the planner stays lean while the
+book grows large with figures. The eBook uses a three-column reader layout that would fight the
+planner's centered layout as an in-page view. One-click navigation between them; both committed to
+the same repo. (Confirmed with the user 2026-08-20.)
+
+### Layout & features
+- **Three columns:** left = full roadmap/contents (the "tracker"); center = active section (SPA
+  swap); right = "On this page" TOC with scrollspy. Collapses to a drawer on mobile.
+- **Search** across all section titles + the body text of authored sections (highlighted snippets).
+- **Dark-mode toggle** (`◐` / `☀`), **back-to-Planner** link, per-viewer state in localStorage.
+
+### Progressive unlocking (core requirement)
+- The sidebar shows the **entire planned outline** (all parts → chapters → sections) as a roadmap,
+  with a status glyph per section: ✓ completed · ● current · 🔒 locked.
+- Only **completed sections + the single current section** are openable; locked ones are disabled.
+- **Linear, prefix-based:** `currentIndex` = number of leading completed sections. Finishing the
+  current section (**"Mark complete & continue"**) advances to and unlocks the next. "Mark as not
+  done" rolls back and re-locks everything after it, keeping the completed set a contiguous prefix.
+- Unlock is **reader-progression driven and additionally gated by authoring**: if the current
+  section has no content yet, it shows a "being written" placeholder (still the current step).
+
+### Data model (top of the `ebook.html` IIFE)
+- `BOOK` — the full outline: array of Parts → `chapters` → `sections` (`{id,num,title}`). This alone
+  drives the sidebar roadmap. **Adding a section to the plan = add an entry here.**
+- `CONTENT` — a map keyed by section `id` → authored HTML string. **A section is "authored" iff its
+  id is a key here.** Writing a section = add `CONTENT["sX-Y"] = ...` (and, for long bodies, a
+  `CONTENT_SX_Y()` builder function near the bottom, mirroring `CONTENT_S1_1`).
+- `FLAT` / `META` — derived flatten + lookup. `PHASE_VARS` maps phase → CSS color vars.
+- localStorage keys: `fabricEbookProgress_v1` (`{completed:{[id]:"YYYY-MM-DD"}}`),
+  `fabricEbookTheme_v1`, `fabricEbookLast_v1` (resume point), `fabricEbookCollapse_v1` (chapter
+  fold state).
+
+### Content authoring conventions (match these when writing new sections)
+- A section body is an HTML string: `<p class="kicker">`, `<h1>`, `<p class="lede">`, then `<h2>`
+  sub-subtopics. **Every `<h2>` carries `data-toc="short label"`** and starts with
+  `<span class="h2n">1.1.1</span>` — the right-hand TOC is auto-built from the `<h2>`s.
+- **Callouts** (`<div class="cal TYPE">` + `.cico` icon + `.clab` label + `.cbody`): `def` 📘
+  Definition · `key` 🔑 Key idea · `exam` 📝 Exam tip (DP-600) · `scn` 🌍 Real-world scenario ·
+  `warn` ⚠️ Common misconception/gotcha. Use `scn` liberally — the user learns by real-world tie-in.
+- **Tables** wrapped in `<div class="tablewrap">` for horizontal scroll.
+- **Figures:** `<figure><div class="figbox">…</div><figcaption><b>Figure N — …</b> …</figcaption></figure>`.
+  Diagrams (architecture, flow) = **inline SVG**, theme-aware via `var(--…)` fills, built by a helper
+  fn (see `FIG_FABRIC`); data charts = **Python/matplotlib PNG** in `figures/`, referenced by
+  relative path. (Figure-style decision confirmed with user 2026-08-20.)
+- **References:** a `<div class="refs">` list of **Microsoft Learn** links at the end of each
+  section — MS official docs are the source of truth; fact-check every section against current docs
+  (Fabric changes fast — mark preview features, note where 2026 differs from older write-ups).
+- **Depth:** the user has ~7 yrs Power BI. Write with real technical depth and real-world scenarios;
+  known topics can be a quick read but must still go deeper. Not terse — full explanations.
+
+### Tutoring workflow for the eBook (how we grow it)
+One subtopic at a time by default: research (MS Learn) → author the section into `CONTENT` → the
+reader unlocks it in sequence. Pause for the user to review depth/style before writing more (unless
+they say "do the whole chapter at once"). Quizzes/grading, if used, happen in chat, not the eBook.
+
 ---
 
 ## Maintenance rule (important)
@@ -132,6 +194,16 @@ conflict before proceeding.
 > per working session. Detailed decision history still lives in PLAN.md's changelog — this is the
 > quick "what did Claude touch" trail.
 
+- **2026-08-20** — **Started the companion eBook ("The Fabric Field Guide").** Created a new
+  self-contained `ebook.html` (three-column reader: roadmap sidebar + content + on-this-page TOC,
+  search, dark mode) with the full DP-600 book outline (4 Parts, 8 Chapters, 32 sections) as a
+  locked roadmap, and progressive prefix-based unlocking. Authored **Subtopic 1.1 "What is
+  Microsoft Fabric?"** in depth, fact-checked against current Microsoft Learn (SaaS positioning,
+  OneLake one-per-tenant + Delta Parquet/**Iceberg**, expanded workload list incl.
+  Databases/Industry Solutions/**Fabric IQ preview**, Copilot), with an inline-SVG Figure 1.1.
+  Added the **eBook button** to `index.html`'s header (gold pill + book icon → `ebook.html`).
+  Added this "The eBook" architecture section to CLAUDE.md and an eBook roadmap/status + changelog
+  to PLAN.md. Verified headless: 32 sections, locking + unlock flow, both themes, no page errors.
 - **2026-08-20** — Published the planner to GitHub Pages. Created public repo
   `sjaggala/fabric-planner`, committed `index.html` + context files, enabled Pages (main root),
   verified https://sjaggala.github.io/fabric-planner/ returns HTTP 200. Updated CLAUDE.md

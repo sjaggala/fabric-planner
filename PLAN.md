@@ -57,6 +57,29 @@ so each week's labs feed the next.
 - ✅ Persistence via localStorage; pace indicator ("on pace" vs "behind").
 - ✅ **Published to GitHub Pages** — public repo `sjaggala/fabric-planner`, served from main root,
   live at https://sjaggala.github.io/fabric-planner/ (verified HTTP 200).
+- 🏗️ **Companion eBook started** — `ebook.html` reader shell built (roadmap, locking, search, dark
+  mode); Subtopic **1.1 authored**; eBook button added to the planner header. (See below.)
+
+## The eBook — "The Fabric Field Guide"
+
+A deep DP-600 study companion in `ebook.html`, grown one subtopic at a time, sourced from and
+fact-checked against **Microsoft Learn**. See CLAUDE.md → "The eBook" for the architecture and
+authoring conventions. Full outline (the sidebar roadmap):
+
+| Part | Chapter | Sections |
+|------|---------|----------|
+| I — Foundations (Wk 1–2) | 1. The Fabric Platform | 1.1 What is Fabric? · 1.2 Workloads · 1.3 Tenants/capacities/SKUs · 1.4 OneLake · 1.5 Shortcuts |
+| I | 2. Lakehouse, Delta & Medallion | 2.1 Lakehouse vs Warehouse · 2.2 Delta fundamentals · 2.3 OPTIMIZE/V-Order/VACUUM · 2.4 Medallion · 2.5 Notebooks & Spark |
+| II — Data Engineering (Wk 3–4) | 3. Transforming with PySpark | 3.1 DataFrame model & lazy eval · 3.2 Core transforms · 3.3 Writing Lakehouse tables · 3.4 Notebook patterns |
+| II | 4. Orchestration with Data Factory | 4.1 Pipelines/Dataflows/notebooks · 4.2 Building pipelines · 4.3 Dataflows Gen2 · 4.4 End-to-end orchestration |
+| III — Warehouse & Power BI (Wk 5–6) | 5. The Fabric Warehouse | 5.1 Architecture · 5.2 Loading & querying · 5.3 Cross-querying · 5.4 Star schema · 5.5 Performance |
+| III | 6. Power BI in Fabric | 6.1 Direct Lake · 6.2 Semantic models · 6.3 ALM (deployment pipelines & Git) |
+| IV — Governance & Exam (Wk 7–8) | 7. Admin, Security & Governance | 7.1 Admin portal & capacity · 7.2 Security model · 7.3 Purview governance |
+| IV | 8. DP-600 Exam Readiness | 8.1 Blueprint & formats · 8.2 Decision trees · 8.3 Study strategy |
+
+**Authoring status:** 1 / 32 sections written (1.1 ✅). Next up: **1.2 The Fabric workloads**.
+**Workflow:** one subtopic at a time → research on MS Learn → author into `CONTENT` → pause for the
+user to review depth/style before continuing (unless they ask for a whole chapter at once).
 
 ## Roadmap / future work (rough priority order)
 
@@ -88,6 +111,17 @@ so each week's labs feed the next.
 
 Keep newest at the top. Log every meaningful decision or change with a date.
 
+- **2026-08-20** — **Started the companion eBook, "The Fabric Field Guide."** Decisions (confirmed
+  with the user): (1) the eBook is a **separate `ebook.html`** page, not a third view in the planner
+  — keeps `index.html` lean, gives the book a proper three-column reader; (2) **figures = inline SVG
+  for diagrams + Python/matplotlib PNG for data charts**; (3) first pass = **shell + Subtopic 1.1
+  only, then pause** for depth/style review. Built the reader (roadmap sidebar with per-section
+  status, prefix-based progressive unlocking, search, on-this-page TOC + scrollspy, dark mode,
+  localStorage). Authored 1.1 with an inline-SVG Figure 1.1, fact-checked vs current MS Learn (noted
+  Fabric has grown since early-2026 knowledge: OneLake now also supports Iceberg; workloads now
+  include Databases, Industry Solutions, Fabric IQ preview; Copilot embedded). Added the eBook button
+  to the planner header. Requirement captured for all future sections: **MS Learn as source of
+  truth, high technical depth, real-world scenarios, figures where they add value.**
 - **2026-08-20** — **Published to GitHub Pages.** Created public repo `sjaggala/fabric-planner`,
   committed `index.html` + context files at root, enabled Pages (main branch, `/`), verified the
   live URL https://sjaggala.github.io/fabric-planner/ returns HTTP 200 serving the planner.
