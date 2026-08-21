@@ -194,6 +194,12 @@ conflict before proceeding.
 > per working session. Detailed decision history still lives in PLAN.md's changelog — this is the
 > quick "what did Claude touch" trail.
 
+- **2026-08-20** — **Pushed the companion eBook to GitHub Pages.** A prior session had committed
+  the eBook locally ("Add companion eBook (The Fabric Field Guide) with Subtopic 1.1") but couldn't
+  push. Cleaned stale `.git/` cruft (HEAD.lock, index.lock, `_stale_index_lock_*`, `tmp_obj_*`),
+  ran `git gc`, verified with `git fsck` (clean), pushed `origin main`. Confirmed
+  https://sjaggala.github.io/fabric-planner/ebook.html returns HTTP 200 and the planner's eBook
+  button is live. No content changes this session — working tree was already clean.
 - **2026-08-20** — **Started the companion eBook ("The Fabric Field Guide").** Created a new
   self-contained `ebook.html` (three-column reader: roadmap sidebar + content + on-this-page TOC,
   search, dark mode) with the full DP-600 book outline (4 Parts, 8 Chapters, 32 sections) as a
